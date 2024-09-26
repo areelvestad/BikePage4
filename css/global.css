@@ -1,0 +1,135 @@
+:root {
+    --color-1: rgb(36, 36, 36);
+    --color-bright-blue: rgb(59, 62, 75);
+    --color-gray-blue: rgb(41, 47, 54);
+    --color-dark-blue: rgb(20, 22, 26);
+    --color-text-1: rgb(196, 196, 196);
+
+    
+    --font-primary: 'Roboto';
+
+    --nav-height: 45px;
+    --carousel-height: 100px; 
+    --charts-height: 200px;
+}
+    .flex {
+        display: flex;
+    }
+    .row {
+        flex-direction: row;
+    }
+    .column {
+        flex-direction: column;
+    }
+
+html {
+    margin: 0;
+    padding: 0;
+    background: var(--color-1);
+    color: var(--color-text-1);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    height: var(--nav-height);
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(41, 47, 54);
+    padding-inline: .5em;
+}
+nav .nav-logo {
+    display: flex;
+    height: 100%;
+}
+    .nav-logo > img {
+        padding: .3em;
+    }
+nav a {
+    color: var(--color-text-1);
+    text-decoration: none;
+}
+
+main {
+    height: calc(100vh - var(--nav-height));
+    padding-inline: .5em;
+    background-color: var(--color-dark-blue);
+    color: var(--color-text-1);
+}
+
+.carousel {
+    background-color: var(--color-bright-blue);
+    margin-top: .5em;
+    padding: .5em;
+    min-height: var(--carousel-height);
+    display: flex;
+    gap: .5em;
+    align-items: center;
+    overflow: hidden;
+    overflow-x: scroll;
+    padding: .5em;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+.carousel::-webkit-scrollbar {
+    display: hidden; /* Hide scrollbar on Chrome/Safari */
+}
+
+.carousel-item {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    width: 150px;
+    min-width: 150px;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(27, 27, 27);
+}
+.carousel-item div {
+    position: relative;
+    width: 150px;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    text-shadow: 2px 2px 3px black;
+}
+.carousel-item img {
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 150px;
+}
+
+.map-container {
+    height: calc(100vh - var(--nav-height) - var(--charts-height) - var(--carousel-height) - 2.25em);
+}
+
+.charts-info {
+    height: var(--charts-height);
+    background-color: var(--color-bright-blue);
+    align-items: center;
+    padding-inline: .5em;
+}
+.trail-info {
+    display: flex;
+    flex: 1;
+    border: 1px solid white;
+    padding-block: .5em;
+}
+.charts {
+    width: 75vw;
+    border: 1px solid white;
+    padding-block: .5em;
+}
+
+footer {
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BikePage 4</title>
+
+	<link rel="stylesheet" href="./css/global.css">
+	<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+	<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body class="flex column">
+	<nav class="flex row">
+		<div class="logo nav-logo">
+			<img src="./img/Logo.svg" alt="logo">
+		</div>
+		<a href="/">Home</a>
+		<a href="/">Trails</a>
+		<a href="/">Share</a>
+		<a href="/">About</a>
+	</nav>
+	<main class="flex column">
+		<div class="carousel flex" id="carousel">
+			<p>Carousel</p>
+		</div>
+		<div class="map-container" id="map"></div>
+		<div class="charts-info flex row">
+			<div class="trail-info">
+			</div>
+			<div class="charts">
+				<canvas id="chart"></canvas>
+			</div>
+		</div>
+	</main>
+	<footer class="flex column footer">
+		<p>Footer</p>
+	</footer>
+</body>
+</html>¨
+
+<script type="module" src="./js/trails.js"></script>
+<script type="module" src="./js/map.js"></script>
+<script type="module" src="./js/carousel.js"></script>
+<script type="module" src="./js/gpx-stats.js"></script>
+<script type="module" src="./js/charts.js"></script>
