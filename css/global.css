@@ -1,6 +1,6 @@
 :root {
     --color-1: rgb(36, 36, 36);
-    --color-bright-blue: rgb(59, 62, 75);
+    --color-bright-blue: rgb(29, 31, 36);
     --color-gray-blue: rgb(41, 47, 54);
     --color-dark-blue: rgb(20, 22, 26);
     --color-text-1: rgb(196, 196, 196);
@@ -76,9 +76,9 @@ main {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
-.carousel::-webkit-scrollbar {
-    display: hidden; /* Hide scrollbar on Chrome/Safari */
-}
+/* .carousel::-webkit-scrollbar {
+    display: none;
+} */
 
 .carousel-item {
     display: flex;
@@ -116,17 +116,24 @@ main {
     background-color: var(--color-bright-blue);
     align-items: center;
     padding-inline: .5em;
+
 }
 .trail-info {
-    display: flex;
+    display: no;
     flex: 1;
-    border: 1px solid white;
-    padding-block: .5em;
+    height: calc(100% - 1em);
+    background-color: rgba(189, 189, 189, 0.233);
 }
 .charts {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
     width: 75vw;
-    border: 1px solid white;
-    padding-block: .5em;
+}
+#chart {
+    max-height: calc(var(--charts-height) - 1em);
+    max-width: calc(75vw - .5em);
 }
 
 footer {

@@ -153,6 +153,7 @@ async function addGPXToMap(map, trail) {
     // Add click event to select the trail
     map.on('click', trail.name, async () => {
         await selectTrail(map, trail);
+        await updateChart(trail.name);
     });
 }
 
