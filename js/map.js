@@ -37,7 +37,6 @@ async function fitMapToTrailBounds(trail) {
             let maxLat = minLat;
             let maxLon = minLon;
 
-            // Loop through all trkpts to calculate min/max lat/lon
             for (let i = 1; i < trkpts.length; i++) {
                 const lat = parseFloat(trkpts[i].getAttribute('lat'));
                 const lon = parseFloat(trkpts[i].getAttribute('lon'));
@@ -48,18 +47,17 @@ async function fitMapToTrailBounds(trail) {
                 if (lon > maxLon) maxLon = lon;
             }
 
-            // Define bounds using min/max lat/lon
             const bounds = [
-                [minLon, minLat], // Southwest corner
-                [maxLon, maxLat]  // Northeast corner
+                [minLon, minLat], 
+                [maxLon, maxLat] 
             ];
 
             const padding = 100;
-            // Fit the map to the bounds
+        
             map.fitBounds(bounds, {
-                padding: { top: padding, bottom: padding, left: padding, right: padding }, // Optional: Add some padding around the trail
-                maxZoom: 13, // Optional: Set a maximum zoom level
-                duration: 1000  // Optional: Animation duration in milliseconds
+                padding: { top: padding, bottom: padding, left: padding, right: padding },
+                maxZoom: 13, 
+                duration: 1000  
             });
         }
     } catch (error) {
@@ -67,22 +65,18 @@ async function fitMapToTrailBounds(trail) {
     }
 }
 
-// The existing selectTrail function
 async function selectTrail(map, trail) {
     if (selectedTrail === trail) {
-        // If the clicked trail is already selected, deselect it
         if (currentMarker) {
             currentMarker.remove();
         }
         selectedTrail = null;
     } else {
-        // Select the new trail and add a marker
         selectedTrail = trail;
         await addMarkerAtStart(map, trail);
     }
 }
 
-// Function to fetch and parse GPX file and get the start point (first trkpt)
 async function getStartPointFromGPX(trail) {
     const gpxUrl = `./gpx/${trail.name}.gpx`;
     try {
@@ -92,7 +86,6 @@ async function getStartPointFromGPX(trail) {
         const parser = new DOMParser();
         const gpx = parser.parseFromString(gpxData, "application/xml");
 
-        // Get the first trkpt (track point) to find the start of the trail
         const firstTrkpt = gpx.getElementsByTagName('trkpt')[0];
         const lat = parseFloat(firstTrkpt.getAttribute('lat'));
         const lon = parseFloat(firstTrkpt.getAttribute('lon'));
@@ -103,7 +96,7 @@ async function getStartPointFromGPX(trail) {
         return null;
     }
 }
-// Function to add a marker at the start of the trail
+
 async function addMarkerAtStart(map, trail) {
     const startPoint = await getStartPointFromGPX(trail);
     if (startPoint && !isNaN(startPoint.lat) && !isNaN(startPoint.lon)) {
@@ -118,7 +111,6 @@ async function addMarkerAtStart(map, trail) {
     }
 }
 
-// Function to fetch and parse GPX file and add it to the map
 async function addGPXToMap(map, trail) {
     const gpxUrl = `./gpx/${trail.name}.gpx`;
 
@@ -127,15 +119,13 @@ async function addGPXToMap(map, trail) {
 
     const parser = new DOMParser();
     const gpx = parser.parseFromString(gpxData, "application/xml");
-    const geojson = toGeoJSON.gpx(gpx); // Assuming toGeoJSON is loaded in your project
+    const geojson = toGeoJSON.gpx(gpx); 
 
-    // Add the parsed GPX (as GeoJSON) to the Mapbox map
     map.addSource(trail.name, {
         type: 'geojson',
         data: geojson
     });
 
-    // Add a layer to style the trail
     map.addLayer({
         id: trail.name,
         type: 'line',
@@ -145,12 +135,12 @@ async function addGPXToMap(map, trail) {
             'line-cap': 'round'
         },
         paint: {
-            'line-color': 'red',  // Customize line color
-            'line-width': 4
+            'line-color': 'red',
+            'line-opacity': 0.8, 
+            'line-width': 2
         }
     });
 
-    // Add click event to select the trail
     map.on('click', trail.name, async () => {
         await selectTrail(map, trail);
         await updateChart(trail.name);
@@ -159,7 +149,6 @@ async function addGPXToMap(map, trail) {
 
 function addTrailsToMap(map) {
     listTrails.forEach(trail => {
-        // Add the GPX trail to the map
         addGPXToMap(map, trail);
     });
 }
@@ -168,15 +157,14 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYXJlZWx2ZXN0YWQiLCJhIjoiY20xZ3UydHVyMDc3NzJtc
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/outdoors-v12',
-    projection: 'globe', // Display the map as a globe
+    projection: 'globe',
     zoom: 8,
-    center: [21.0263, 69.7664]  // Centering in Northern Norway
+    center: [21.0263, 69.7664]
 });
 
 map.addControl(new mapboxgl.NavigationControl());
 
 map.on('load', () => {
-    // Add terrain exaggeration
     map.addSource('mapbox-dem', {
         'type': 'raster-dem',
         'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -185,7 +173,6 @@ map.on('load', () => {
     });
     map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
 
-    // Load and display trails
     addTrailsToMap(map);
 });
 

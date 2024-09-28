@@ -1,39 +1,36 @@
 import { listTrails } from './trails.js';
 import { statsFromGPX } from './gpx-stats.js';
 
-let chart; // Declare the chart variable globally
+let chart;
 
 async function updateChart(trailName) {
     const trail = listTrails.find(t => t.name === trailName);
     if (trail) {
-        // Fetch the height, speed, and distance data from GPX
+
         const { heightData, speedData, distanceData } = await statsFromGPX(trail);
 
         const ctx = document.getElementById('chart').getContext('2d');
 
-        // If the chart already exists, destroy it before creating a new one
         if (chart) {
             chart.destroy();
         }
 
-        // Make sure the chart canvas has a height (you can adjust this)
         const chartElement = document.getElementById('chart');
-        chartElement.style.height = '400px';  // Ensure the canvas has a height
+        chartElement.style.height = '400px';
 
-        // Create the chart with the selected trail data
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: distanceData, // X-axis (distance)
+                labels: distanceData,
                 datasets: [
                     {
                         label: 'Speed (km/h)',
-                        data: speedData, // Speed data
-                        borderColor: 'rgba(255, 99, 132, 1)', // Red line for speed
+                        data: speedData,
+                        borderColor: 'rgba(255, 99, 132, 1)',
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        yAxisID: 'y1', // Right y-axis
+                        yAxisID: 'y1',
                         fill: false,
-                        pointRadius: 0, // Hide the points by default
+                        pointRadius: 0,
                         pointHoverRadius: 5,
                         cubicInterpolationMode: 'monotone',
                         tension: .5,
@@ -41,28 +38,28 @@ async function updateChart(trailName) {
                     },
                     {
                         label: 'Height (m)',
-                        data: heightData, // Height data
-                        borderColor: 'rgba(54, 162, 235, 1)', // Blue line for height
+                        data: heightData,
+                        borderColor: 'rgba(54, 162, 235, 1)',
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        yAxisID: 'y', // Left y-axis
+                        yAxisID: 'y',
                         fill: true,
-                        pointRadius: 0, // Hide the points by default
+                        pointRadius: 0,
                         pointHoverRadius: 5,
-                        cubicInterpolationMode: 'monotone', // Enable smooth curves
+                        cubicInterpolationMode: 'monotone',
                         tension: 0.1,
                     }                    
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Allow chart to fill the canvas height
+                maintainAspectRatio: false,
                 interaction: {
                     mode: 'index',
                     intersect: false,
                 },
                 plugins: {
                     legend: {
-                        display: false // Hide legend for a cleaner look
+                        display: false
                     },
                     tooltip: {
                         enabled: true,
@@ -72,11 +69,10 @@ async function updateChart(trailName) {
                         callbacks: {
                             label: function(tooltipItem) {
                                 const dataIndex = tooltipItem.dataIndex;
-                                const elevation = heightData[dataIndex]; // Elevation data
-                                const speedValue = speedData[dataIndex]; // Speed data
-                                const distanceValue = distanceData[dataIndex]; // Distance data
+                                const speedValue = speedData[dataIndex];
+                                const elevation = heightData[dataIndex];
+                                const distanceValue = distanceData[dataIndex];
 
-                                // Show speed and elevation with colored boxes
                                 if (tooltipItem.datasetIndex === 1) {
                                     return `Speed: ${speedValue} km/h`;
                                 } else {
@@ -86,7 +82,7 @@ async function updateChart(trailName) {
                             afterBody: function(tooltipItems) {
                                 const dataIndex = tooltipItems[0].dataIndex;
                                 const distanceValue = distanceData[dataIndex];
-                                return `Distance: ${distanceValue} km`; // Show distance once
+                                return `Distance: ${distanceValue} km`;
                             }
                         }
                     }
@@ -98,7 +94,7 @@ async function updateChart(trailName) {
                             text: 'Distance (km)'
                         },
                         grid: {
-                            display: false // Hide grid lines on the X-axis
+                            display: false
                         }
                     },
                     y: {
@@ -109,7 +105,7 @@ async function updateChart(trailName) {
                             text: 'Height (m)'
                         },
                         grid: {
-                            display: false // Hide grid lines on the Y-axis (Height)
+                            display: false
                         }
                     },
                     y1: {
@@ -120,8 +116,8 @@ async function updateChart(trailName) {
                             text: 'Speed (km/h)'
                         },
                         grid: {
-                            display: false, // Hide grid lines on the Y1-axis (Speed)
-                            drawOnChartArea: false, // Prevent the grid from being drawn over the chart
+                            display: false,
+                            drawOnChartArea: false,
                         }
                     }
                 }
@@ -130,5 +126,4 @@ async function updateChart(trailName) {
     }
 }
 
-// Export this function to be called when a trail is selected
 export { updateChart };

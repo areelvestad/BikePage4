@@ -1,7 +1,7 @@
 import { listTrails } from './trails.js';
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; // Earth’s radius in meters
+    const R = 6371e3;
     const φ1 = lat1 * (Math.PI / 180);
     const φ2 = lat2 * (Math.PI / 180);
     const Δφ = (lat2 - lat1) * (Math.PI / 180);
@@ -12,16 +12,15 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
               Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return R * c; // Distance in meters
+    return R * c;
 }
 
 export async function statsFromGPX(trail) {
     const gpxUrl = `./gpx/${trail.name}.gpx`;
 
-    // Arrays for chart data
     let heightData = [];
     let speedData = [];
-    let distanceData = [0]; // Distance starts from 0
+    let distanceData = [0];
 
     try {
         const response = await fetch(gpxUrl);
@@ -79,26 +78,21 @@ export async function statsFromGPX(trail) {
             const speed = segmentDistance / timeDiff;
             totalSpeed += speed;
 
-            // Add distance, speed, and height data for the chart
-            distanceData.push((totalDistance / 1000).toFixed(2)); // Distance in km
+            distanceData.push((totalDistance / 1000).toFixed(2));
 
             if (speed > minSpeedThreshold) {
-                // If moving, push the actual speed and update the last known moving speed
-                const speedInKmh = (speed * 3.6).toFixed(2); // Convert to km/h
+                const speedInKmh = (speed * 3.6).toFixed(2);
                 speedData.push(speedInKmh);
-                lastMovingSpeed = speedInKmh; // Update the last known moving speed
+                lastMovingSpeed = speedInKmh;
             } else if (lastMovingSpeed !== null) {
-                // If not moving, push the last known moving speed
                 speedData.push(lastMovingSpeed);
             } else {
-                // If there is no known moving speed yet, treat it as 0 (or you can choose a default value)
                 speedData.push(0);
             }
 
-            const ele = parseFloat(currPt.getElementsByTagName('ele')[0].textContent); // Elevation
-            heightData.push(ele); // Store elevation data
+            const ele = parseFloat(currPt.getElementsByTagName('ele')[0].textContent);
+            heightData.push(ele);
 
-            // Tune this to calculate moving time
             if (speed > 0.1 && timeDiff < 30) {
                 totalTimeMoving += timeDiff;
                 totalMovingDistance += segmentDistance;
@@ -136,19 +130,17 @@ export async function statsFromGPX(trail) {
     }
 }
 
-// Interpolation function to smooth speedData
 function interpolateSpeedData(speedData) {
-    const useThreePointAverage = speedData.length > 666; // Condition to switch averaging method
+    const useThreePointAverage = speedData.length > 666;
 
     if (useThreePointAverage) {
-        // Use the average of every 3rd point if the array has more than 666 values
         for (let i = 1; i < speedData.length - 2; i++) {
             speedData[i] = (
-                (parseFloat(speedData[i - 1]) + parseFloat(speedData[i]) + parseFloat(speedData[i + 1])) / 3
+                (parseFloat(speedData[i - 1]) + parseFloat(speedData[i]) + parseFloat(speedData[i]) 
+                + parseFloat(speedData[i]) + parseFloat(speedData[i]) + parseFloat(speedData[i + 1])) / 6
             ).toFixed(2);
         }
     } else {
-        // Use the average of every 2 adjacent points if the array has 666 or fewer values
         for (let i = 1; i < speedData.length - 1; i++) {
             speedData[i] = ((parseFloat(speedData[i - 1]) + parseFloat(speedData[i + 1])) / 2).toFixed(2);
         }
